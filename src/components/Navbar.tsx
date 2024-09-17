@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Menu, X } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -8,6 +7,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Link } from "react-router-dom"
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = React.useState(false)
@@ -17,23 +17,28 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
-                        <span className="text-2xl font-bold text-primary">
+                        <Link to={'/'} className="text-2xl font-bold text-primary">
                             Expensy
-                        </span>
+                        </Link>
                     </div>
                     <div className="hidden md:block">
                         <div className="ml-10 flex items-baseline space-x-4">
-                            <span
-                                className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                            <Link to={'/add-transactions'}
+                                className="text-muted-foreground hover:text-primary py-2 rounded-md text-sm font-medium cursor-pointer"
                             >
                                 Add Transaction
-                            </span>
-                            <span
-                                className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+                            </Link>
+                            <Link to={'/all-transactions'}
+                                className="text-muted-foreground hover:text-primary py-2 rounded-md text-sm font-medium"
                             >
                                 View All Transactions
-                            </span>
-                            <Button>Login</Button>
+                            </Link>
+                            <Link to={'/login'}>
+                                <Button className="bg-blue-600 hover:bg-blue-700">Login</Button>
+                            </Link>
+                            <Link to={'/signup'}>
+                                <Button className="bg-green-700 hover:bg-green-800">Signup</Button>
+                            </Link>
                         </div>
                     </div>
                     <div className="md:hidden flex items-center">
@@ -46,17 +51,24 @@ export default function Navbar() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-[200px]">
                                 <DropdownMenuItem>
-                                    <span className="w-full">
+                                    <Link to={'/add-transactions'} className="w-full">
                                         Add Transaction
-                                    </span>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <span className="w-full">
+                                    <Link to={'/all-transactions'} className="w-full">
                                         View All Transactions
-                                    </span>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <Button className="w-full">Login</Button>
+                                    <Link to={'/login'} className="w-full">
+                                        <Button className="w-full bg-blue-600 hover:bg-blue-700">Login</Button>
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link to={'/signup'} className="w-full">
+                                        <Button className="w-full bg-green-700 hover:bg-green-800">Signup</Button>
+                                    </Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

@@ -17,11 +17,11 @@ export default function Home() {
           Hello, {userName}
         </h1>
         <p className="text-xl text-muted-foreground">
-          Here's a quick overview of your finances today.
+          Here's a quick overview of your finances
         </p>
       </div>
       <div className="space-y-6">
-        <Card className="bg-gradient-to-r from-blue-500 to-blue-600">
+        <Card className="bg-gradient-to-r from-blue-500 to-blue-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-lg font-medium text-white">
               Total Balance
@@ -32,7 +32,7 @@ export default function Home() {
             <div className="text-3xl font-bold text-white">${totalBalance.toLocaleString()}</div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-r from-red-500 to-red-600">
+        <Card className="bg-gradient-to-r from-red-500 to-red-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-lg font-medium text-white">
               Total Expenses
@@ -43,7 +43,7 @@ export default function Home() {
             <div className="text-3xl font-bold text-white">${totalExpenses.toLocaleString()}</div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-r from-green-500 to-green-600">
+        <Card className="bg-gradient-to-r from-green-500 to-green-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-lg font-medium text-white">
               Total Income
