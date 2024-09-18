@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 const Login = () => {
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle login logic
   };
 
   const handleGoogleLogin = () => {

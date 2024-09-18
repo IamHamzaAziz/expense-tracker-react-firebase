@@ -6,20 +6,24 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import AllTransactions from './pages/AllTransactions'
 import AddTransaction from './pages/AddTransaction'
+import { UserContextProvider } from './context/UserContext'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/all-transactions' element={<AllTransactions />} />
-          <Route path='/add-transactions' element={<AddTransaction />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <UserContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<Signup />} />
+            <Route path='/all-transactions' element={<AllTransactions />} />
+            <Route path='/add-transactions' element={<AddTransaction />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </UserContextProvider>
+
   )
 }
 

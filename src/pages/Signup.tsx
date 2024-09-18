@@ -2,11 +2,58 @@ import React from 'react'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { Toaster } from '@/components/ui/toaster';
+import { UserContext } from '@/context/UserContext';
+import { auth } from '@/config/firebase';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
-  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [password2, setPassword2] = useState("")
+  const { toast } = useToast()
+
+  const navigate = useNavigate()
+
+  const { setUserId } = React.useContext(UserContext)
+
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle Signup logic
+    
+    if (!email || !password || !password2) {
+      toast({
+        variant: "destructive",
+        title: "Fill all fields"
+      })
+
+      return
+    }
+
+    if (password!== password2) {
+      toast({
+        variant: "destructive",
+        title: "Passwords do not match"
+      })
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid email address"
+      })
+      return
+    }
+
+    await createUserWithEmailAndPassword(auth, email, password)
+    const signRes = await signInWithEmailAndPassword(auth, email, password)
+    setUserId(signRes.user.uid)
+    
+    navigate('/')
   };
 
   const handleGoogleSignup = () => {
@@ -25,9 +72,10 @@ const Signup = () => {
             <Input
               type="email"
               id="email"
-              required
               className="mt-1 w-full"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div>
@@ -37,9 +85,10 @@ const Signup = () => {
             <Input
               type="password"
               id="password"
-              required
               className="mt-1 w-full"
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div>
@@ -49,9 +98,10 @@ const Signup = () => {
             <Input
               type="password"
               id="re-password"
-              required
               className="mt-1 w-full"
               placeholder="Re Enter your password"
+              value={password2}
+              onChange={(e) => setPassword2(e.target.value)}
             />
           </div>
           <div className="flex items-center justify-between">
@@ -71,6 +121,8 @@ const Signup = () => {
           Already have an account?<br />Then login <Link to={'/login'} className='text-blue-700 underline po'>here</Link>
         </p>
       </div>
+      
+      <Toaster />
     </div>
   )
 }
