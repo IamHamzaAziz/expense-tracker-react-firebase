@@ -1,4 +1,4 @@
-import * as React from "react"
+import { useEffect, useState, useContext } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,12 +11,13 @@ import { Link, useNavigate } from "react-router-dom"
 import { UserContext } from "@/context/UserContext"
 import { signOut } from "firebase/auth"
 import { auth } from "@/config/firebase"
+import { onAuthStateChanged } from "firebase/auth"
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = React.useState(false)
+    const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
 
-    const { userId, setUserId } = React.useContext(UserContext)
+    const { userId, setUserId } = useContext(UserContext)
 
     async function logout() {
         setUserId("")
@@ -24,6 +25,19 @@ export default function Navbar() {
 
         navigate('/')
     }
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setUserId(user.uid)
+            } else {
+                setUserId('')
+            }
+        })
+
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+    }, [])
 
     return (
         <nav className="bg-background border-b w-full">

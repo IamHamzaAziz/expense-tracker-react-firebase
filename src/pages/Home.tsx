@@ -1,20 +1,34 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowDownIcon, ArrowUpIcon, DollarSignIcon } from "lucide-react"
+import { auth } from "@/config/firebase"
+import { useEffect, useContext } from "react"
+import { onAuthStateChanged } from "firebase/auth"
+import { UserContext } from "@/context/UserContext"
+
 
 export default function Home() {
-  // This would typically come from your authentication context or state management
-  const userName = "Hamza"
 
-  // These values would typically come from your API or state management
-  const totalBalance = 5000
-  const totalExpenses = 2000
-  const totalIncome = 7000
+  const { setUserId } = useContext(UserContext)
+
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid)
+      } else {
+        setUserId('')
+      }
+    })
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [])
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-2">
-          Hello, {userName}
+          Hello, Hamza
         </h1>
         <p className="text-xl text-muted-foreground">
           Here's a quick overview of your finances
@@ -29,7 +43,7 @@ export default function Home() {
             <DollarSignIcon className="h-6 w-6 text-white" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-white">${totalBalance.toLocaleString()}</div>
+            <div className="text-3xl font-bold text-white">$7000</div>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-r from-red-500 to-red-700">
@@ -40,7 +54,7 @@ export default function Home() {
             <ArrowDownIcon className="h-6 w-6 text-white" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-white">${totalExpenses.toLocaleString()}</div>
+            <div className="text-3xl font-bold text-white">$2000</div>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-r from-green-500 to-green-700">
@@ -51,7 +65,7 @@ export default function Home() {
             <ArrowUpIcon className="h-6 w-6 text-white" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-white">${totalIncome.toLocaleString()}</div>
+            <div className="text-3xl font-bold text-white">$5000</div>
           </CardContent>
         </Card>
       </div>
