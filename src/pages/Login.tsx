@@ -1,11 +1,49 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
+import { auth } from '@/config/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
+import { Toaster } from '@/components/ui/toaster';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '@/context/UserContext';
 
 const Login = () => {
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const { toast } = useToast()
+  const navigate = useNavigate()
+  const { setUserId } = useContext(UserContext)
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid email address"
+      })
+      return
+    }
+
+    try {
+      const res = await signInWithEmailAndPassword(auth, email, password)
+      setUserId(res.user.uid)
+      navigate('/')
+    } catch (error: any) {
+      if (error.code === "auth/invalid-credential") {
+        toast({
+          variant: "destructive",
+          title: "Invalid email or password"
+        })
+        return
+      }
+
+      console.log(error)
+    }
   };
 
   const handleGoogleLogin = () => {
@@ -27,6 +65,8 @@ const Login = () => {
               required
               className="mt-1 w-full"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div>
@@ -39,6 +79,8 @@ const Login = () => {
               required
               className="mt-1 w-full"
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="flex items-center justify-between">
@@ -48,16 +90,20 @@ const Login = () => {
           </div>
         </form>
         <div className="my-6 text-center text-gray-500">OR</div>
+
         <Button
-          className="w-full bg-red-600 hover:bg-red-700 text-white"
+          className="w-full bg-red-600 hover:bg-red-700 text-white space-x-2"
           onClick={handleGoogleLogin}
         >
           Login with Google
         </Button>
+
         <p className="text-sm text-muted-foreground mt-5 text-center">
           Don't have an account yet?<br />Create one <Link to={'/signup'} className='text-blue-700 underline po'>here</Link>
         </p>
       </div>
+
+      <Toaster />
     </div>
   )
 }

@@ -40,6 +40,14 @@ const Signup = () => {
       return
     }
 
+    if (password.length < 6) {
+      toast({
+        variant: "destructive",
+        title: "Password must be at least 6 characters long"
+      })
+      return
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast({
@@ -49,11 +57,27 @@ const Signup = () => {
       return
     }
 
-    await createUserWithEmailAndPassword(auth, email, password)
-    const signRes = await signInWithEmailAndPassword(auth, email, password)
-    setUserId(signRes.user.uid)
-    
-    navigate('/')
+    try {
+      await createUserWithEmailAndPassword(auth, email, password)
+      const res = await signInWithEmailAndPassword(auth, email, password)
+      setUserId(res.user.uid)
+      
+      navigate('/')
+    } catch (error: any) {
+      if (error.code === "auth/email-already-in-use") {
+        toast({
+          variant: "destructive",
+          title: "Email already in use"
+        })
+        return
+      }
+
+      toast({
+        variant: "destructive",
+        title: "Unable to Signup"
+      })
+      console.log(error)
+    }
   };
 
   const handleGoogleSignup = () => {
