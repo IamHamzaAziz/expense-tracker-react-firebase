@@ -6,8 +6,8 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
 import { UserContext } from '@/context/UserContext';
-import { auth } from '@/config/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, googleProvider } from '@/config/firebase';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
@@ -80,8 +80,18 @@ const Signup = () => {
     }
   };
 
-  const handleGoogleSignup = () => {
-    // Handle Signup with Google logic
+  const handleGoogleSignup = async () => {
+    try {
+      const res = await signInWithPopup(auth, googleProvider)
+      setUserId(res.user.uid)
+      navigate('/')
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Unable to Signup"
+      })
+      return
+    }
   };
 
   return (

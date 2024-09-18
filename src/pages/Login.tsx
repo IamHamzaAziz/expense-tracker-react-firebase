@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
-import { auth } from '@/config/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, googleProvider } from '@/config/firebase';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
 import { useNavigate } from 'react-router-dom';
@@ -46,8 +46,18 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    // Handle login with Google logic
+  const handleGoogleLogin = async () => {
+    try {
+      const res = await signInWithPopup(auth, googleProvider)
+      setUserId(res.user.uid)
+      navigate('/')
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Unable to Login"
+      })
+      return
+    }
   };
 
   return (
