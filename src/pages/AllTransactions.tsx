@@ -17,11 +17,12 @@ interface Item {
 
 function AllTransactions() {
     const [transactions, setTransactions] = useState<Item[]>([])
+    const [loading, setLoading] = useState(false)
 
     const { userId, setUserId } = useContext(UserContext)
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUserId(user.uid)
             } else {
@@ -29,10 +30,17 @@ function AllTransactions() {
             }
         })
 
-        fetchTransactions()
+        return () => unsubscribe() 
     }, [])
 
+    useEffect(() => {
+        if (userId) {
+            fetchTransactions()
+        }
+    }, [userId])
+
     async function fetchTransactions() {
+        setLoading(true)
         const transactionsCollection = collection(db, 'transactions')
 
         const q = query(transactionsCollection, where('user', '==', userId))
@@ -44,6 +52,7 @@ function AllTransactions() {
         })) as Item[]
 
         setTransactions(data)
+        setLoading(false)
     }
 
     return (
@@ -55,78 +64,57 @@ function AllTransactions() {
             </div>
 
             {
-                transactions.length === 0 ? (
+                loading ? (
                     <div className="text-center text-xl text-muted-foreground">
-                        No transactions found
+                        Loading transactions...
                     </div>
                 ) : (
-                    <div className="space-y-6">
-                        {
-                            transactions.map(transaction => {
-                                const { id, title, amount, type } = transaction
-
-                                if (type === 'income') {
-                                    return (
-                                        <Card className="bg-gradient-to-r from-green-500 to-green-700" key={id}>
-                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                                <CardTitle className="text-lg font-medium text-white">
-                                                    {title}
-                                                </CardTitle>
-                                                <ArrowDown className="h-6 w-6 text-white" />
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="text-xl font-bold text-white">${amount.toString()}</div>
-                                            </CardContent>
-                                        </Card>
-                                    )
-                                }
-                                else {
-                                    return (
-                                        <Card className="bg-gradient-to-r from-red-500 to-red-700" key={id}>
-                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                                <CardTitle className="text-lg font-medium text-white">
-                                                    { title }
-                                                </CardTitle>
-                                                <ArrowUpIcon className="h-6 w-6 text-white" />
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="text-xl font-bold text-white">${amount.toString()}</div>
-                                            </CardContent>
-                                        </Card>
-                                    )
-                                }
-                            })
-                        }
-                    </div>
+                    transactions.length === 0 ? (
+                        <div className="text-center text-xl text-muted-foreground">
+                            No transactions found
+                        </div>
+                    ) : (
+                        <div className="space-y-6">
+                            {
+                                transactions.map(transaction => {
+                                    const { id, title, amount, type } = transaction
+    
+                                    if (type === 'income') {
+                                        return (
+                                            <Card className="bg-gradient-to-r from-green-500 to-green-700" key={id}>
+                                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                                    <CardTitle className="text-lg font-medium text-white">
+                                                        {title}
+                                                    </CardTitle>
+                                                    <ArrowDown className="h-6 w-6 text-white" />
+                                                </CardHeader>
+                                                <CardContent>
+                                                    <div className="text-xl font-bold text-white">${amount.toString()}</div>
+                                                </CardContent>
+                                            </Card>
+                                        )
+                                    }
+                                    else {
+                                        return (
+                                            <Card className="bg-gradient-to-r from-red-500 to-red-700" key={id}>
+                                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                                    <CardTitle className="text-lg font-medium text-white">
+                                                        { title }
+                                                    </CardTitle>
+                                                    <ArrowUpIcon className="h-6 w-6 text-white" />
+                                                </CardHeader>
+                                                <CardContent>
+                                                    <div className="text-xl font-bold text-white">${amount.toString()}</div>
+                                                </CardContent>
+                                            </Card>
+                                        )
+                                    }
+                                })
+                            }
+                        </div>
+                    )
                 )
             }
-
-            {/* <div className="space-y-6">
-                <Card className="bg-gradient-to-r from-green-500 to-green-700">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-lg font-medium text-white">
-                            August 2024 Pay - Income
-                        </CardTitle>
-                        <ArrowDown className="h-6 w-6 text-white" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-xl font-bold text-white">$2000</div>
-                    </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-r from-red-500 to-red-700">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-lg font-medium text-white">
-                            August 2024 Pay - Income
-                        </CardTitle>
-                        <ArrowUpIcon className="h-6 w-6 text-white" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-xl font-bold text-white">$2000</div>
-                    </CardContent>
-                </Card>
-
-            </div> */}
         </div>
     )
 }

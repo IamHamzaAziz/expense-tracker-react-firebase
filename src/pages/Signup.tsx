@@ -14,6 +14,8 @@ const Signup = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [password2, setPassword2] = useState("")
+  const [loading, setLoading] = useState(false)
+
   const { toast } = useToast()
 
   const navigate = useNavigate()
@@ -58,9 +60,11 @@ const Signup = () => {
     }
 
     try {
+      setLoading(true)
       await createUserWithEmailAndPassword(auth, email, password)
       const res = await signInWithEmailAndPassword(auth, email, password)
       setUserId(res.user.uid)
+      setLoading(false)
       
       navigate('/')
     } catch (error: any) {
@@ -140,7 +144,9 @@ const Signup = () => {
           </div>
           <div className="flex items-center justify-between">
             <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-              Signup
+              {
+                loading ? "Signing up..." : "Signup"
+              }
             </Button>
           </div>
         </form>

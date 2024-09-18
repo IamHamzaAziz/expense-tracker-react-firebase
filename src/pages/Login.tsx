@@ -16,6 +16,7 @@ const Login = () => {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,8 +31,10 @@ const Login = () => {
     }
 
     try {
+      setLoading(true)
       const res = await signInWithEmailAndPassword(auth, email, password)
       setUserId(res.user.uid)
+      setLoading(false)
       navigate('/')
     } catch (error: any) {
       if (error.code === "auth/invalid-credential") {
@@ -39,6 +42,7 @@ const Login = () => {
           variant: "destructive",
           title: "Invalid email or password"
         })
+        setLoading(false)
         return
       }
 
@@ -95,7 +99,9 @@ const Login = () => {
           </div>
           <div className="flex items-center justify-between">
             <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-              Login
+              {
+                !loading ? "Login" : "Logging in..."
+              }
             </Button>
           </div>
         </form>
