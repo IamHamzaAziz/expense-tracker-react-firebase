@@ -7,6 +7,8 @@ import Signup from './pages/Signup'
 import AllTransactions from './pages/AllTransactions'
 import AddTransaction from './pages/AddTransaction'
 import { UserContextProvider } from './context/UserContext'
+import LoginReq from './protected_routes/LoginReq'
+import LogoutReq from './protected_routes/LogoutReq'
 
 function App() {
   return (
@@ -14,11 +16,11 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<Signup />} />
-            <Route path='/all-transactions' element={<AllTransactions />} />
-            <Route path='/add-transactions' element={<AddTransaction />} />
+            <Route index element={<LoginReq><Home /></LoginReq>} />
+            <Route path='/login' element={<LogoutReq><Login /></LogoutReq>} />
+            <Route path='/signup' element={<LogoutReq><Signup /></LogoutReq>} />
+            <Route path='/all-transactions' element={<LoginReq><AllTransactions /></LoginReq>} />
+            <Route path='/add-transactions' element={<LoginReq><AddTransaction /></LoginReq>} />
           </Route>
         </Routes>
       </BrowserRouter>

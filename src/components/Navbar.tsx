@@ -15,16 +15,10 @@ import { onAuthStateChanged } from "firebase/auth"
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
 
     const { userId, setUserId } = useContext(UserContext)
-
-    async function logout() {
-        setUserId("")
-        await signOut(auth)
-
-        navigate('/')
-    }
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -33,11 +27,39 @@ export default function Navbar() {
             } else {
                 setUserId('')
             }
+            setLoading(false)
         })
 
         // Cleanup subscription on unmount
         return () => unsubscribe();
     }, [])
+
+    async function logout() {
+        setUserId("")
+        await signOut(auth)
+
+        navigate('/')
+    }
+
+    if (loading) {
+        return (
+            <nav className="bg-background border-b w-full">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16">
+                        <div className="flex items-center">
+                            <Link to={'/'} className="text-2xl font-bold text-primary">
+                                Expensy
+                            </Link>
+                        </div>
+
+                        <div>
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        )
+    }
 
     return (
         <nav className="bg-background border-b w-full">
