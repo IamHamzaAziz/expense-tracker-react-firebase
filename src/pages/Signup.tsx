@@ -24,7 +24,7 @@ const Signup = () => {
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!email || !password || !password2) {
       toast({
         variant: "destructive",
@@ -34,7 +34,7 @@ const Signup = () => {
       return
     }
 
-    if (password!== password2) {
+    if (password !== password2) {
       toast({
         variant: "destructive",
         title: "Passwords do not match"
@@ -65,7 +65,7 @@ const Signup = () => {
       const res = await signInWithEmailAndPassword(auth, email, password)
       setUserId(res.user.uid)
       setLoading(false)
-      
+
       navigate('/')
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
@@ -143,11 +143,17 @@ const Signup = () => {
             />
           </div>
           <div className="flex items-center justify-between">
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-              {
-                loading ? "Signing up..." : "Signup"
-              }
-            </Button>
+            {
+              loading ? (
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  Signing Up...
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  Sign Up
+                </Button>
+              )
+            }
           </div>
         </form>
         <div className="my-6 text-center text-gray-500">OR</div>
@@ -161,7 +167,7 @@ const Signup = () => {
           Already have an account?<br />Then login <Link to={'/login'} className='text-blue-700 underline po'>here</Link>
         </p>
       </div>
-      
+
       <Toaster />
     </div>
   )

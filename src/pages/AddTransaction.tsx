@@ -20,6 +20,7 @@ const AddTransaction = () => {
     const [title, setTitle] = useState("");
     const [amount, setAmount] = useState("");
     const [type, setType] = useState("");
+    const [loading, setLoading] = useState(false)
 
     const [user, setUser] = useState("")
 
@@ -41,6 +42,7 @@ const AddTransaction = () => {
     }, [])
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        setLoading(true)
         e.preventDefault();
 
         if (!title || !amount || !type) {
@@ -48,31 +50,33 @@ const AddTransaction = () => {
                 variant: "destructive",
                 title: "Fill all fields"
             })
+            setLoading(false)
             return
         }
 
         try {
             const transCollection = collection(db, 'transactions');
-    
-            const res = await addDoc(transCollection, {
+
+            await addDoc(transCollection, {
                 title: title,
                 amount: Number(amount),
                 type: type,
                 user: user
             })
-    
-            console.log(res)
-    
+
+            setLoading(false)
+
             toast({
                 variant: 'default',
-                title: "Transactions added successfully."
+                title: "Transaction added successfully."
             })
-            
+
         } catch (error) {
             toast({
                 variant: 'destructive',
                 title: "Unable to add transaction"
             })
+            setLoading(false)
             console.error(error)
         }
     };
@@ -135,9 +139,17 @@ const AddTransaction = () => {
                         </Select>
                     </div>
 
-                    <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white">
-                        Add Transaction
-                    </Button>
+                    {
+                        loading ? (
+                            <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                                Adding Transaction...
+                            </Button>
+                        ) : (
+                            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white">
+                                Add Transaction
+                            </Button>
+                        )
+                    }
                 </form>
             </div>
 

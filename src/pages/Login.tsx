@@ -98,11 +98,17 @@ const Login = () => {
             />
           </div>
           <div className="flex items-center justify-between">
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-              {
-                !loading ? "Login" : "Logging in..."
-              }
-            </Button>
+            {
+              loading ? (
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  Logging in...
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  Login
+                </Button>
+              )
+            }
           </div>
         </form>
         <div className="my-6 text-center text-gray-500">OR</div>
