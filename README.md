@@ -1,50 +1,27 @@
-# React + TypeScript + Vite
+# Expensy - Expenses Tracking Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Expensy is a expense tracking web application built using **React**, **TypeScript**, **Firebase**, and **Shadcn UI** components. It allows users to easily track their incomes and expenses, view their total balance, and manage transactions with a clean and intuitive interface.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Expense and Income Tracking**:
+  - View total expenses, total income, and overall balance on the home page.
+  - Add new transactions (income or expense) with title and amount.
+- **Authentication**:
 
-## Expanding the ESLint configuration
+  - Email/Password and Google authentication powered by Firebase.
+  - Protected routes to ensure that each user can only visit the routes he is meant to.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Transactions Page**:
 
-- Configure the top-level `parserOptions` property like this:
+  - View a complete list of all your incomes and expenses.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Add Transaction Page**:
+  - Easily add a transaction with a title, amount, and type (income/expense).
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Technologies Used
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- **React**: Frontend framework for building user interfaces.
+- **TypeScript**: Strict typing for JavaScript, improving code quality and error detection.
+- **Firebase**: Backend for authentication and data storage.
+- **Shadcn UI**: Customizable and modular UI components for a modern user experience.
