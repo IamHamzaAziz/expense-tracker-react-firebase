@@ -25,3 +25,17 @@ Expensy is a expense tracking web application built using **React**, **TypeScrip
 - **TypeScript**: Strict typing for JavaScript, improving code quality and error detection.
 - **Firebase**: Backend for authentication and data storage.
 - **Shadcn UI**: Customizable and modular UI components for a modern user experience.
+
+## Run Project
+
+In order to run this project on your device, first download the project and then type following command in the terminal.
+
+```
+npm install
+```
+
+This will install all of the dependencies and then type following command in the terminal to run the project.
+
+```
+npm run dev
+```
