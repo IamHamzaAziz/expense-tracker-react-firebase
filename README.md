@@ -28,13 +28,24 @@ Expensy is a expense tracking web application built using **React**, **TypeScrip
 
 ## Run Project
 
-In order to run this project on your device, first download the project and then type following command in the terminal.
+In order to run this project on your device, first download the project and then run following command in the terminal to install all of the necessary dependencies
 
 ```
 npm install
 ```
 
-This will install all of the dependencies and then type following command in the terminal to run the project.
+Now create a Firebase project and replace the following env variables with your own.
+
+```
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDEER_ID
+VITE_FIREBASE_APP_ID
+```
+
+Now run below command to run the project on your device.
 
 ```
 npm run dev
